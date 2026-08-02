@@ -1,37 +1,43 @@
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(200).send("Tributly bot is running");
-  }
+const TELEGRAM_API = "https://api.telegram.org";
+const WEBSITE_URL = "https://tributly.io";
 
-  try {
-    const update = req.body;
-
-    if (!update?.message) {
-      return res.status(200).send("ok");
-    }
-
-    const chatId = update.message.chat.id;
-    const text = update.message.text;
-
-    let reply = "";
-
-    if (text === "/start") {
-      reply = `
-👋 Welcome to Tributly
+const screens = {
+  start: {
+    text: `
+👋 <b>Welcome to Tributly</b>
 
 Your attention has value.
 
-Tributly helps you earn rewards while browsing normally.
+Earn rewards while browsing normally.
 
-We are preparing our beta launch.
+🚀 <b>Launching in August.</b>
 
-Choose an option:
-`;
-    }
+Join the waitlist to stay updated:
+${WEBSITE_URL}
+`.trim(),
+    keyboard: [
+      [
+        {
+          text: "🚀 Join the waitlist",
+          url: WEBSITE_URL
+        }
+      ],
+      [
+        {
+          text: "💡 How it works",
+          callback_data: "howitworks"
+        },
+        {
+          text: "❓ FAQ",
+          callback_data: "faq"
+        }
+      ]
+    ]
+  },
 
-    if (text === "/howitworks") {
-      reply = `
-💡 How Tributly works:
+  howitworks: {
+    text: `
+💡 <b>How Tributly works</b>
 
 1. Install the browser extension
 2. Browse normally
@@ -39,63 +45,220 @@ Choose an option:
 4. Receive rewards
 
 No extra tasks. No changes to your habits.
-`;
+`.trim(),
+    keyboard: [
+      [
+        {
+          text: "🚀 Join the waitlist",
+          url: WEBSITE_URL
+        }
+      ],
+      [
+        {
+          text: "⬅️ Back",
+          callback_data: "start"
+        },
+        {
+          text: "❓ FAQ",
+          callback_data: "faq"
+        }
+      ]
+    ]
+  },
+
+  faq: {
+    text: `
+❓ <b>FAQ</b>
+
+<b>What is Tributly?</b>
+Tributly rewards users for their online attention.
+
+<b>Do I need to change how I browse?</b>
+No. Browse as usual.
+
+<b>Is this mining?</b>
+No.
+
+<b>When does Tributly launch?</b>
+Tributly is launching in August.
+
+Join the waitlist to stay updated.
+`.trim(),
+    keyboard: [
+      [
+        {
+          text: "🚀 Join the waitlist",
+          url: WEBSITE_URL
+        }
+      ],
+      [
+        {
+          text: "⬅️ Back",
+          callback_data: "start"
+        },
+        {
+          text: "💡 How it works",
+          callback_data: "howitworks"
+        }
+      ]
+    ]
+  },
+
+  joinwaitlist: {
+    text: `
+🚀 <b>Join the Tributly waitlist</b>
+
+Sign up to receive launch updates:
+
+${WEBSITE_URL}
+`.trim(),
+    keyboard: [
+      [
+        {
+          text: "🚀 Join the waitlist",
+          url: WEBSITE_URL
+        }
+      ],
+      [
+        {
+          text: "⬅️ Back",
+          callback_data: "start"
+        }
+      ]
+    ]
+  }
+};
+
+async function telegramRequest(token, method, body) {
+  const response = await fetch(
+    `${TELEGRAM_API}/bot${token}/${method}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok || !result.ok) {
+    throw new Error(
+      `Telegram API error: ${JSON.stringify(result)}`
+    );
+  }
+
+  return result;
+}
+
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(200).send("Tributly bot is running");
+  }
+
+  try {
+    const token = process.env.BOT_TOKEN;
+
+    if (!token) {
+      throw new Error("BOT_TOKEN is not configured");
     }
 
-    if (text === "/faq") {
-      reply = `
-❓ FAQ
+    const update = req.body;
+    const message = update?.message;
+    const callbackQuery = update?.callback_query;
 
-Q: What is Tributly?
-A: Tributly rewards users for their online attention.
-
-Q: Do I need to change how I browse?
-A: No.
-
-Q: Is this mining?
-A: No.
-
-Q: When does beta start?
-A: Join the waitlist to get updates.
-`;
-    }
-
-    if (text === "/joinbeta") {
-      reply = `
-🚀 Join Tributly Beta
-
-Get early access:
-
-https://tributly.io
-`;
-    }
-
-    if (!reply) {
+    if (!message && !callbackQuery) {
       return res.status(200).send("ok");
     }
 
-    const response = await fetch(
-      `https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text: reply
-        })
+    const chatId =
+      message?.chat?.id ||
+      callbackQuery?.message?.chat?.id;
+
+    const messageId = callbackQuery?.message?.message_id;
+
+    const input =
+      message?.text?.trim() ||
+      callbackQuery?.data;
+
+    let screenName = null;
+
+    switch (input) {
+      case "/start":
+      case "start":
+        screenName = "start";
+        break;
+
+      case "/howitworks":
+      case "howitworks":
+        screenName = "howitworks";
+        break;
+
+      case "/faq":
+      case "faq":
+        screenName = "faq";
+        break;
+
+      case "/joinwaitlist":
+      case "/joinbeta":
+      case "joinwaitlist":
+        screenName = "joinwaitlist";
+        break;
+
+      default:
+        return res.status(200).send("ok");
+    }
+
+    const screen = screens[screenName];
+
+    // Убирает индикатор загрузки после нажатия inline-кнопки.
+    if (callbackQuery) {
+      await telegramRequest(
+        token,
+        "answerCallbackQuery",
+        {
+          callback_query_id: callbackQuery.id
+        }
+      );
+    }
+
+    const payload = {
+      chat_id: chatId,
+      text: screen.text,
+      parse_mode: "HTML",
+      link_preview_options: {
+        is_disabled: true
+      },
+      reply_markup: {
+        inline_keyboard: screen.keyboard
       }
-    );
+    };
 
-    const result = await response.json();
-
-    console.log("Telegram:", result);
+    // При нажатии кнопки обновляем существующее сообщение,
+    // чтобы бот не создавал кучу новых сообщений.
+    if (callbackQuery && messageId) {
+      await telegramRequest(
+        token,
+        "editMessageText",
+        {
+          ...payload,
+          message_id: messageId
+        }
+      );
+    } else {
+      await telegramRequest(
+        token,
+        "sendMessage",
+        payload
+      );
+    }
 
     return res.status(200).send("ok");
-
   } catch (error) {
-    console.error(error);
+    console.error("Tributly bot error:", error);
+
+    // Telegram должен получить 200, иначе будет повторять webhook.
     return res.status(200).send("error");
   }
 }
