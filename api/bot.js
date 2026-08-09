@@ -13,7 +13,6 @@ Earn rewards while browsing normally.
 🚀 <b>Launching in August.</b>
 
 Join the waitlist to stay updated:
-${WEBSITE_URL}
 `.trim(),
     keyboard: [
       [
