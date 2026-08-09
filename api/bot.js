@@ -1,5 +1,5 @@
 const TELEGRAM_API = "https://api.telegram.org";
-const WEBSITE_URL = "https://tributly.io";
+const WEBSITE_URL = "https://tributly.io/?utm_source=telegram&utm_medium=paid&utm_campaign=telegram_ads";
 
 const screens = {
   start: {
