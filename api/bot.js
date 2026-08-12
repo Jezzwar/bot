@@ -1,5 +1,9 @@
 const TELEGRAM_API = "https://api.telegram.org";
-const WEBSITE_URL = "https://tributly.io/?utm_source=telegram&utm_medium=paid&utm_campaign=telegram_ads";
+const WEBSITE_URL =
+  "https://tributly.io/?utm_source=telegram&utm_medium=paid&utm_campaign=telegram_ads";
+
+const ADVERTISER_URL =
+  "https://tributly.io/?utm_source=telegram&utm_medium=paid&utm_campaign=advertisers";
 
 const screens = {
   start: {
@@ -29,6 +33,12 @@ Join the waitlist to stay updated:
         {
           text: "❓ FAQ",
           callback_data: "faq"
+        }
+      ],
+      [
+        {
+          text: "📢 For advertisers",
+          callback_data: "advertisers"
         }
       ]
     ]
@@ -98,6 +108,36 @@ Join the waitlist to stay updated.
         {
           text: "💡 How it works",
           callback_data: "howitworks"
+        }
+      ]
+    ]
+  },
+
+  advertisers: {
+    text: `
+📢 <b>For advertisers</b>
+
+Reach people who spend their day online.
+
+Promote your SaaS, AI tool, app or digital product through a new advertising layer built for desktop users.
+
+💸 Flexible bidding
+🌎 Audience targeting
+📊 Track CTR, CPC and CPM
+
+🚀 Launching soon. Join the advertiser waitlist:
+`.trim(),
+    keyboard: [
+      [
+        {
+          text: "📢 Join advertiser waitlist",
+          url: ADVERTISER_URL
+        }
+      ],
+      [
+        {
+          text: "⬅️ Back",
+          callback_data: "start"
         }
       ]
     ]
@@ -199,6 +239,10 @@ export default async function handler(req, res) {
         screenName = "faq";
         break;
 
+      case "advertisers":
+        screenName = "advertisers";
+        break;
+
       case "/joinwaitlist":
       case "/joinbeta":
       case "joinwaitlist":
@@ -211,7 +255,6 @@ export default async function handler(req, res) {
 
     const screen = screens[screenName];
 
-    // Убирает индикатор загрузки после нажатия inline-кнопки.
     if (callbackQuery) {
       await telegramRequest(
         token,
@@ -234,8 +277,6 @@ export default async function handler(req, res) {
       }
     };
 
-    // При нажатии кнопки обновляем существующее сообщение,
-    // чтобы бот не создавал кучу новых сообщений.
     if (callbackQuery && messageId) {
       await telegramRequest(
         token,
@@ -254,10 +295,10 @@ export default async function handler(req, res) {
     }
 
     return res.status(200).send("ok");
+
   } catch (error) {
     console.error("Tributly bot error:", error);
 
-    // Telegram должен получить 200, иначе будет повторять webhook.
     return res.status(200).send("error");
   }
 }
