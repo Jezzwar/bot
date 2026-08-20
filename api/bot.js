@@ -6,6 +6,8 @@ const WEBSITE_URL =
 const ADVERTISER_URL =
   "https://tributly.io/?utm_source=telegram&utm_medium=paid&utm_campaign=advertisers";
 
+const LEAD_RECEIVER_CHAT_ID = "-1004427158558";
+
 
 // =====================================================
 // HELPERS
@@ -251,9 +253,6 @@ export default async function handler(req, res) {
     const token =
       process.env.BOT_TOKEN;
 
-    const leadReceiverChatId =
-      process.env.LEAD_RECEIVER_CHAT_ID;
-
 
     if (!token) {
       throw new Error(
@@ -266,8 +265,6 @@ export default async function handler(req, res) {
       req.body;
 
 
-    // Полезно оставить на первое время.
-    // В Vercel Logs можно посмотреть входящие Telegram updates.
     console.log(
       "TELEGRAM UPDATE:",
       JSON.stringify(update, null, 2)
@@ -281,7 +278,6 @@ export default async function handler(req, res) {
       update?.callback_query;
 
 
-    // Игнорируем ненужные update
     if (!message && !callbackQuery) {
       return res
         .status(200)
@@ -317,7 +313,6 @@ export default async function handler(req, res) {
 
     // =====================================================
     // /chatid
-    // Показывает ID текущего чата
     // =====================================================
 
     if (
@@ -346,12 +341,6 @@ export default async function handler(req, res) {
 <b>Chat:</b> ${chatName}
 <b>Type:</b> ${escapeHtml(chatType || "unknown")}
 <b>ID:</b> <code>${chatId}</code>
-
-Copy this ID into:
-
-<code>LEAD_RECEIVER_CHAT_ID</code>
-
-in Vercel Environment Variables.
 `.trim(),
 
           parse_mode:
@@ -379,7 +368,6 @@ in Vercel Environment Variables.
         callbackQuery.from;
 
 
-      // Убираем загрузку с Telegram-кнопки
       await telegramRequest(
         token,
         "answerCallbackQuery",
@@ -391,54 +379,6 @@ in Vercel Environment Variables.
             "Sending your profile…"
         }
       );
-
-
-      // Проверяем, настроен ли общий чат
-      if (!leadReceiverChatId) {
-        console.error(
-          "LEAD_RECEIVER_CHAT_ID is not configured"
-        );
-
-
-        await telegramRequest(
-          token,
-          "editMessageText",
-          {
-            chat_id:
-              chatId,
-
-            message_id:
-              messageId,
-
-            text: `
-⚠️ <b>Something went wrong</b>
-
-We couldn't send your profile right now.
-
-Please try again later.
-`.trim(),
-
-            parse_mode:
-              "HTML",
-
-            reply_markup: {
-              inline_keyboard: [
-                [
-                  {
-                    text: "⬅️ Back",
-                    callback_data: "advertisers"
-                  }
-                ]
-              ]
-            }
-          }
-        );
-
-
-        return res
-          .status(200)
-          .send("ok");
-      }
 
 
       // =====================================================
@@ -485,8 +425,6 @@ Please try again later.
           : "Unknown";
 
 
-      // Если username есть — обычная Telegram ссылка.
-      // Если username нет — используем Telegram ID.
       const leadProfileUrl =
         user?.username
           ? `https://t.me/${user.username}`
@@ -521,7 +459,7 @@ The user shared their Telegram profile and requested contact from the Tributly t
         "sendMessage",
         {
           chat_id:
-            leadReceiverChatId,
+            LEAD_RECEIVER_CHAT_ID,
 
           text:
             leadText,
@@ -654,7 +592,6 @@ The team can contact you directly on Telegram.
       screens[screenName];
 
 
-    // Убираем индикатор загрузки с inline-кнопки
     if (callbackQuery) {
       await telegramRequest(
         token,
@@ -735,8 +672,6 @@ The team can contact you directly on Telegram.
     );
 
 
-    // Возвращаем 200, чтобы Telegram
-    // не повторял один update снова и снова
     return res
       .status(200)
       .send("error");
