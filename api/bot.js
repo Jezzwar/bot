@@ -6,14 +6,6 @@ const WEBSITE_URL =
 const ADVERTISER_URL =
   "https://tributly.io/?utm_source=telegram&utm_medium=paid&utm_campaign=advertisers";
 
-// =====================================================
-// MANAGER
-// =====================================================
-
-const MANAGER_USERNAME = "cactus_bod";
-const MANAGER_URL = `https://t.me/${MANAGER_USERNAME}`;
-const MANAGER_CHAT_ID = "610260127";
-
 
 // =====================================================
 // HELPERS
@@ -175,12 +167,6 @@ Choose how you'd like to get started:
       ],
       [
         {
-          text: "💬 Message a manager",
-          url: MANAGER_URL
-        }
-      ],
-      [
-        {
           text: "⬅️ Back",
           callback_data: "start"
         }
@@ -258,8 +244,16 @@ export default async function handler(req, res) {
   }
 
   try {
-    // BOT TOKEN берём из Vercel Environment Variables
-    const token = process.env.BOT_TOKEN;
+    // =====================================================
+    // ENVIRONMENT VARIABLES
+    // =====================================================
+
+    const token =
+      process.env.BOT_TOKEN;
+
+    const leadReceiverChatId =
+      process.env.LEAD_RECEIVER_CHAT_ID;
+
 
     if (!token) {
       throw new Error(
@@ -268,7 +262,17 @@ export default async function handler(req, res) {
     }
 
 
-    const update = req.body;
+    const update =
+      req.body;
+
+
+    // Полезно оставить на первое время.
+    // В Vercel Logs можно посмотреть входящие Telegram updates.
+    console.log(
+      "TELEGRAM UPDATE:",
+      JSON.stringify(update, null, 2)
+    );
+
 
     const message =
       update?.message;
@@ -277,7 +281,7 @@ export default async function handler(req, res) {
       update?.callback_query;
 
 
-    // Игнорируем update, который нам не нужен
+    // Игнорируем ненужные update
     if (!message && !callbackQuery) {
       return res
         .status(200)
@@ -290,6 +294,17 @@ export default async function handler(req, res) {
       callbackQuery?.message?.chat?.id;
 
 
+    const chatType =
+      message?.chat?.type ||
+      callbackQuery?.message?.chat?.type;
+
+
+    const chatTitle =
+      message?.chat?.title ||
+      callbackQuery?.message?.chat?.title ||
+      "";
+
+
     const messageId =
       callbackQuery?.message?.message_id;
 
@@ -297,6 +312,58 @@ export default async function handler(req, res) {
     const input =
       message?.text?.trim() ||
       callbackQuery?.data;
+
+
+
+    // =====================================================
+    // /chatid
+    // Показывает ID текущего чата
+    // =====================================================
+
+    if (
+      message?.text &&
+      (
+        message.text === "/chatid" ||
+        message.text.startsWith("/chatid@")
+      )
+    ) {
+      const chatName =
+        chatTitle
+          ? escapeHtml(chatTitle)
+          : "Private chat";
+
+
+      await telegramRequest(
+        token,
+        "sendMessage",
+        {
+          chat_id:
+            chatId,
+
+          text: `
+🆔 <b>Telegram Chat ID</b>
+
+<b>Chat:</b> ${chatName}
+<b>Type:</b> ${escapeHtml(chatType || "unknown")}
+<b>ID:</b> <code>${chatId}</code>
+
+Copy this ID into:
+
+<code>LEAD_RECEIVER_CHAT_ID</code>
+
+in Vercel Environment Variables.
+`.trim(),
+
+          parse_mode:
+            "HTML"
+        }
+      );
+
+
+      return res
+        .status(200)
+        .send("ok");
+    }
 
 
 
@@ -324,6 +391,54 @@ export default async function handler(req, res) {
             "Sending your profile…"
         }
       );
+
+
+      // Проверяем, настроен ли общий чат
+      if (!leadReceiverChatId) {
+        console.error(
+          "LEAD_RECEIVER_CHAT_ID is not configured"
+        );
+
+
+        await telegramRequest(
+          token,
+          "editMessageText",
+          {
+            chat_id:
+              chatId,
+
+            message_id:
+              messageId,
+
+            text: `
+⚠️ <b>Something went wrong</b>
+
+We couldn't send your profile right now.
+
+Please try again later.
+`.trim(),
+
+            parse_mode:
+              "HTML",
+
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  {
+                    text: "⬅️ Back",
+                    callback_data: "advertisers"
+                  }
+                ]
+              ]
+            }
+          }
+        );
+
+
+        return res
+          .status(200)
+          .send("ok");
+      }
 
 
       // =====================================================
@@ -370,8 +485,8 @@ export default async function handler(req, res) {
           : "Unknown";
 
 
-      // Если username есть — открываем обычную ссылку.
-      // Если username нет — используем Telegram user ID.
+      // Если username есть — обычная Telegram ссылка.
+      // Если username нет — используем Telegram ID.
       const leadProfileUrl =
         user?.username
           ? `https://t.me/${user.username}`
@@ -379,7 +494,7 @@ export default async function handler(req, res) {
 
 
       // =====================================================
-      // MESSAGE FOR MANAGER
+      // LEAD MESSAGE
       // =====================================================
 
       const leadText = `
@@ -398,7 +513,7 @@ The user shared their Telegram profile and requested contact from the Tributly t
 
 
       // =====================================================
-      // SEND LEAD TO MANAGER
+      // SEND LEAD TO TEAM CHAT
       // =====================================================
 
       await telegramRequest(
@@ -406,7 +521,7 @@ The user shared their Telegram profile and requested contact from the Tributly t
         "sendMessage",
         {
           chat_id:
-            MANAGER_CHAT_ID,
+            leadReceiverChatId,
 
           text:
             leadText,
@@ -422,7 +537,7 @@ The user shared their Telegram profile and requested contact from the Tributly t
             inline_keyboard: [
               [
                 {
-                  text: "💬 Open lead profile",
+                  text: "👤 Open lead profile",
                   url: leadProfileUrl
                 }
               ]
@@ -433,7 +548,7 @@ The user shared their Telegram profile and requested contact from the Tributly t
 
 
       // =====================================================
-      // SUCCESS SCREEN FOR ADVERTISER
+      // SUCCESS SCREEN
       // =====================================================
 
       await telegramRequest(
@@ -451,9 +566,7 @@ The user shared their Telegram profile and requested contact from the Tributly t
 
 Thanks! Your Telegram profile has been shared with the Tributly team.
 
-A manager can now contact you directly on Telegram.
-
-Want to talk right now?
+The team can contact you directly on Telegram.
 `.trim(),
 
           parse_mode:
@@ -465,12 +578,6 @@ Want to talk right now?
 
           reply_markup: {
             inline_keyboard: [
-              [
-                {
-                  text: "💬 Message a manager",
-                  url: MANAGER_URL
-                }
-              ],
               [
                 {
                   text: "🚀 Join advertiser waitlist",
@@ -500,7 +607,8 @@ Want to talk right now?
     // NORMAL BOT SCREENS
     // =====================================================
 
-    let screenName = null;
+    let screenName =
+      null;
 
 
     switch (input) {
@@ -600,6 +708,7 @@ Want to talk right now?
       );
     }
 
+
     // =====================================================
     // SEND NEW MESSAGE
     // =====================================================
@@ -618,6 +727,7 @@ Want to talk right now?
       .send("ok");
   }
 
+
   catch (error) {
     console.error(
       "Tributly bot error:",
@@ -626,7 +736,7 @@ Want to talk right now?
 
 
     // Возвращаем 200, чтобы Telegram
-    // не повторял один и тот же webhook update
+    // не повторял один update снова и снова
     return res
       .status(200)
       .send("error");
