@@ -7,6 +7,7 @@ const ADVERTISER_URL =
   "https://tributly.io/?utm_source=telegram&utm_medium=paid&utm_campaign=advertisers";
 
 const LEAD_RECEIVER_CHAT_ID = "-1004427158558";
+const LEAD_RECEIVER_THREAD_ID = 64;
 
 
 // =====================================================
@@ -460,6 +461,9 @@ The user shared their Telegram profile and requested contact from the Tributly t
         {
           chat_id:
             LEAD_RECEIVER_CHAT_ID,
+
+          message_thread_id:
+            LEAD_RECEIVER_THREAD_ID,
 
           text:
             leadText,
