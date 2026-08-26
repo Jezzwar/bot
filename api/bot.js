@@ -10,6 +10,7 @@ const LEAD_RECEIVER_CHAT_ID = "-1004427158558";
 const LEAD_RECEIVER_THREAD_ID = 64;
 
 
+
 // =====================================================
 // HELPERS
 // =====================================================
@@ -22,6 +23,7 @@ function escapeHtml(value = "") {
 }
 
 
+
 // =====================================================
 // SCREENS
 // =====================================================
@@ -32,12 +34,11 @@ const screens = {
 👋 <b>Welcome to Tributly</b>
 
 Your attention has value.
-
 Earn rewards while browsing normally.
 
-🚀 <b>Launching in August.</b>
+🚀 <b>Launching September 4th.</b>
 
-Join the waitlist to stay updated:
+Join the waitlist to stay updated.
 `.trim(),
 
     keyboard: [
@@ -67,14 +68,15 @@ Join the waitlist to stay updated:
   },
 
 
+
   howitworks: {
     text: `
 💡 <b>How Tributly works</b>
 
-1. Install the browser extension
-2. Browse normally
-3. See sponsored content
-4. Receive rewards
+• Install the browser extension
+• Browse normally
+• See a small sponsor line inside your browser
+• Receive rewards
 
 No extra tasks. No changes to your habits.
 `.trim(),
@@ -100,23 +102,34 @@ No extra tasks. No changes to your habits.
   },
 
 
+
   faq: {
     text: `
 ❓ <b>FAQ</b>
 
 <b>What is Tributly?</b>
-Tributly rewards users for their online attention.
+A free browser extension that rewards you with a share of the ad revenue your attention generates.
 
-<b>Do I need to change how I browse?</b>
-No. Browse as usual.
+<b>Is Tributly legit?</b>
+Yes. Tributly is a registered company. We never charge you or ask for your password.
 
-<b>Is this mining?</b>
-No.
+<b>How much will I actually earn?</b>
+Most users earn around $5–$20 per month with regular browsing (about 3 hours/day, 22 days/month).
 
-<b>When does Tributly launch?</b>
-Tributly is launching in August.
+Think of it as coffee money, not a salary. Your earnings depend on your activity and the number of sponsored ads you see.
 
-Join the waitlist to stay updated.
+Rewards are capped at $5/day and $20/week, with a maximum of about $80/month. Every payout is backed by real advertising revenue.
+
+Payouts start from $10 and are processed through Stripe.
+
+<b>Does Tributly see my browsing history?</b>
+No. We only verify ads and rewards. We never see your browsing history or page content.
+
+<b>Do you sell my data?</b>
+No. Your data is never sold.
+
+<b>Which browsers are supported?</b>
+Chrome and Edge are supported. Firefox and Safari are coming soon.
 `.trim(),
 
     keyboard: [
@@ -138,9 +151,7 @@ Join the waitlist to stay updated.
       ]
     ]
   },
-
-
-  advertisers: {
+    advertisers: {
     text: `
 📢 <b>Advertise with Tributly</b>
 
@@ -178,6 +189,7 @@ Choose how you'd like to get started:
   },
 
 
+
   joinwaitlist: {
     text: `
 🚀 <b>Join the Tributly waitlist</b>
@@ -203,6 +215,7 @@ ${WEBSITE_URL}
     ]
   }
 };
+
 
 
 // =====================================================
@@ -234,7 +247,6 @@ async function telegramRequest(token, method, body) {
   return result;
 }
 
-
 // =====================================================
 // HANDLER
 // =====================================================
@@ -247,9 +259,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    // =====================================================
-    // ENVIRONMENT VARIABLES
-    // =====================================================
 
     const token =
       process.env.BOT_TOKEN;
@@ -323,6 +332,7 @@ export default async function handler(req, res) {
         message.text.startsWith("/chatid@")
       )
     ) {
+
       const chatName =
         chatTitle
           ? escapeHtml(chatTitle)
@@ -365,6 +375,7 @@ export default async function handler(req, res) {
       callbackQuery?.data ===
       "advertiser_lead"
     ) {
+
       const user =
         callbackQuery.from;
 
@@ -381,10 +392,6 @@ export default async function handler(req, res) {
         }
       );
 
-
-      // =====================================================
-      // USER DATA
-      // =====================================================
 
       const firstName =
         escapeHtml(
@@ -432,10 +439,6 @@ export default async function handler(req, res) {
           : `tg://user?id=${telegramId}`;
 
 
-      // =====================================================
-      // LEAD MESSAGE
-      // =====================================================
-
       const leadText = `
 🔥 <b>New advertiser lead</b>
 
@@ -450,10 +453,6 @@ export default async function handler(req, res) {
 The user shared their Telegram profile and requested contact from the Tributly team.
 `.trim();
 
-
-      // =====================================================
-      // SEND LEAD TO TEAM CHAT
-      // =====================================================
 
       await telegramRequest(
         token,
@@ -488,10 +487,6 @@ The user shared their Telegram profile and requested contact from the Tributly t
         }
       );
 
-
-      // =====================================================
-      // SUCCESS SCREEN
-      // =====================================================
 
       await telegramRequest(
         token,
@@ -554,6 +549,7 @@ The team can contact you directly on Telegram.
 
 
     switch (input) {
+
       case "/start":
       case "start":
         screenName = "start";
@@ -597,6 +593,7 @@ The team can contact you directly on Telegram.
 
 
     if (callbackQuery) {
+
       await telegramRequest(
         token,
         "answerCallbackQuery",
@@ -609,6 +606,7 @@ The team can contact you directly on Telegram.
 
 
     const payload = {
+
       chat_id:
         chatId,
 
@@ -629,14 +627,11 @@ The team can contact you directly on Telegram.
     };
 
 
-    // =====================================================
-    // EDIT EXISTING MESSAGE
-    // =====================================================
-
     if (
       callbackQuery &&
       messageId
     ) {
+
       await telegramRequest(
         token,
         "editMessageText",
@@ -647,29 +642,25 @@ The team can contact you directly on Telegram.
             messageId
         }
       );
-    }
 
+    } else {
 
-    // =====================================================
-    // SEND NEW MESSAGE
-    // =====================================================
-
-    else {
       await telegramRequest(
         token,
         "sendMessage",
         payload
       );
+
     }
 
 
     return res
       .status(200)
       .send("ok");
-  }
 
 
-  catch (error) {
+  } catch (error) {
+
     console.error(
       "Tributly bot error:",
       error
