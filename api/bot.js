@@ -107,29 +107,27 @@ No extra tasks. No changes to your habits.
     text: `
 ❓ <b>FAQ</b>
 
-<b>▫️What is Tributly?</b>
+<b>♦️What is Tributly?</b>
 A free browser extension that rewards you with a share of the ad revenue your attention generates.
 
-<b>▫️Is Tributly legit?</b>
+<b>♦️Is Tributly legit?</b>
 Yes. Tributly is a registered company. We never charge you or ask for your password.
 
-<b>How much will I actually earn?</b>
-Most users earn around $5–$20 per month with regular browsing (about 3 hours/day, 22 days/month).
-
-Think of it as coffee money, not a salary. Your earnings depend on your activity and the number of sponsored ads you see.
-
-Rewards are capped at $5/day and $20/week, with a maximum of about $80/month. Every payout is backed by real advertising revenue.
-
-Payouts start from $10 and are processed through Stripe.
-
-<b>▫️Does Tributly see my browsing history?</b>
+<b>♦️Does Tributly see my browsing history?</b>
 No. We only verify ads and rewards. We never see your browsing history or page content.
 
-<b>▫️Do you sell my data?</b>
+<b>♦️Do you sell my data?</b>
 No. Your data is never sold.
 
-<b>▫️Which browsers are supported?</b>
+<b>♦️Which browsers are supported?</b>
 Chrome and Edge are supported. Firefox and Safari are coming soon.
+
+<b>♦️How much will I actually earn?</b>
+Most users earn around $5–$20 per month with regular browsing (about 2+ hours/day, 22 days/month).
+
+Your earnings depend on your activity and the number of sponsored ads you see.
+
+Payouts start from $10 and are processed through Stripe.
 `.trim(),
 
     keyboard: [
