@@ -122,9 +122,6 @@ No. Your data is never sold.
 <b>♦️Which browsers are supported?</b>
 Chrome and Edge are supported. Firefox and Safari are coming soon.
 
-<b>♦️How much will I actually earn?</b>
-Most users earn around $5–$20 per month with regular browsing (about 2+ hours/day, 22 days/month).
-
 Your earnings depend on your activity and the number of sponsored ads you see.
 
 Payouts start from $10 and are processed through Stripe.
