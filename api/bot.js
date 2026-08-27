@@ -121,10 +121,6 @@ No. Your data is never sold.
 
 <b>♦️Which browsers are supported?</b>
 Chrome and Edge are supported. Firefox and Safari are coming soon.
-
-Your earnings depend on your activity and the number of sponsored ads you see.
-
-Payouts start from $10 and are processed through Stripe.
 `.trim(),
 
     keyboard: [
