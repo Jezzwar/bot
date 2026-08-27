@@ -1,10 +1,10 @@
 const TELEGRAM_API = "https://api.telegram.org";
 
 const WEBSITE_URL =
-  "https://tributly.io/?utm_source=telegram&utm_medium=paid&utm_campaign=telegram_ads";
+  "https://tributly.io/";
 
 const ADVERTISER_URL =
-  "https://tributly.io/?utm_source=telegram&utm_medium=paid&utm_campaign=advertisers";
+  "https://tributly.io/";
 
 const LEAD_RECEIVER_CHAT_ID = "-1004427158558";
 const LEAD_RECEIVER_THREAD_ID = 64;
