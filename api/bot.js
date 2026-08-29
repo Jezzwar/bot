@@ -172,6 +172,12 @@ Choose how you'd like to get started:
       ],
       [
         {
+          text: "💬 Chat to manager",
+          url: "https://t.me/cactus_bod"
+        }
+      ],
+      [
+        {
           text: "⬅️ Back",
           callback_data: "start"
         }
