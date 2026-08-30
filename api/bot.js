@@ -129,7 +129,7 @@ Chrome and Edge are supported. Firefox and Safari are coming soon.
     keyboard: [
       [
         {
-          text: "🚀 Join the waitlist",
+          text: "🗓️ Join the waitlist",
           url: WEBSITE_URL
         }
       ],
@@ -169,7 +169,7 @@ Choose how you'd like to get started:
     ],
       [
         {
-          text: "🚀 Join advertiser waitlist",
+          text: "🗓️ Join advertiser waitlist",
           url: ADVERTISER_URL
         }
       ],
