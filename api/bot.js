@@ -87,7 +87,7 @@ No extra tasks. No changes to your habits.
     keyboard: [
       [
         {
-          text: "🚀 Join the waitlist",
+          text: "🗓️ Join the waitlist",
           url: WEBSITE_URL
         }
       ],
