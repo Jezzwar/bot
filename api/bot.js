@@ -47,7 +47,7 @@ Join the waitlist to stay updated.
     keyboard: [
       [
         {
-          text: "🚀 Join the waitlist",
+          text: "🗓️ Join the waitlist",
           url: WEBSITE_URL
         }
       ],
