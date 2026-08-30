@@ -6,6 +6,9 @@ const WEBSITE_URL =
 const ADVERTISER_URL =
   "https://tributly.io/?utm_source=telegram&utm_medium=paid&utm_campaign=telegram_ads";
 
+const ADVERTISER_URL_2 =
+  "https://beta.tributly.io/?panel=advertise";
+
 const LEAD_RECEIVER_CHAT_ID = "-1004427158558";
 const LEAD_RECEIVER_THREAD_ID = 64;
 
@@ -160,6 +163,12 @@ Choose how you'd like to get started:
     keyboard: [
       [
         {
+          text: "🚀 Start advertising",
+          callback_data: "joinadvertiser"
+        }
+    ],
+      [
+        {
           text: "🚀 Join advertiser waitlist",
           url: ADVERTISER_URL
         }
@@ -178,6 +187,46 @@ Choose how you'd like to get started:
       ]
     ]
   },
+  
+  joinadvertiser: {
+  text: `
+⚠️ <b>Advertiser launch is coming</b>
+
+Tributly goes live on September 4th.
+
+Before launch, advertisers can already prepare:
+• Create an advertiser account
+• Set up your first campaign
+• Choose your bid and budget
+• Add funds to your balance
+
+Ads will start running only after launch, when the first users are online.
+
+💳 No charges before September 4th.
+You only pay when your ad is actually displayed.
+
+💰 Your balance never expires.
+Unused funds can be refunded anytime.
+
+Be ready before the first impressions become available.
+  `.trim(),
+
+  keyboard: [
+    [
+      {
+        text: "🚀 Create advertiser account",
+        url: ADVERTISER_URL_2
+      }
+    ],
+    [
+      {
+        text: "⬅️ Back",
+        callback_data: "advertisers"
+      }
+    ]
+  ]
+},
+  
 
 
 
@@ -564,6 +613,9 @@ The team can contact you directly on Telegram.
         screenName = "advertisers";
         break;
 
+      case "joinadvertiser":
+        screenName = "joinadvertiser";
+        break;
 
       case "/joinwaitlist":
       case "/joinbeta":
