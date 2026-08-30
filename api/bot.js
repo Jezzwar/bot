@@ -4,13 +4,13 @@ const WEBSITE_URL =
   "https://tributly.io/?utm_source=telegram&utm_medium=paid&utm_campaign=telegram_ads";
 
 const WEBSITE_URL_2 =
-  "https://beta.tributly.io/?panel=earn";
+  "https://beta.tributly.io/?panel=earn&utm_source=telegram&utm_medium=cpc&utm_campaign=users_earn";
 
 const ADVERTISER_URL =
   "https://tributly.io/?utm_source=telegram&utm_medium=paid&utm_campaign=telegram_ads";
 
 const ADVERTISER_URL_2 =
-  "https://beta.tributly.io/?panel=advertise";
+  "https://beta.tributly.io/?panel=advertise&utm_source=telegram&utm_medium=cpc&utm_campaign=advertisers";
 
 const LEAD_RECEIVER_CHAT_ID = "-1004427158558";
 const LEAD_RECEIVER_THREAD_ID = 64;
@@ -44,15 +44,15 @@ Earn rewards while browsing normally.
 
 🚀 <b>Launching September 4th.</b>
 
-Join the waitlist to stay updated.
+Join the waitlist to stay updated or GET early access ✨.
 `.trim(),
 
     keyboard: [
       [
         {
-          text: "🚀 Become a User",
+          text: "👤 Become a User",
           callback_data: "joinuser"
-      }
+        }
       ],
       [
         {
@@ -236,7 +236,7 @@ joinuser: {
 
 The extension is currently in Chrome and Edge store review.
 
-Until approval, it cannot be installed yet — and installation is the only thing standing between you and earning rewards.
+Until approval, it cannot be installed yet - and installation is the only thing standing between you and earning rewards.
 
 Everything else is already running:
 • Your account system
@@ -245,6 +245,8 @@ Everything else is already running:
 • The platform infrastructure
 
 Once the extension is approved, you can install it, browse normally and start earning from your attention.
+
+We start September 4th. See you soon!
 
 🚀 Be one of the first users when we launch.
   `.trim(),
@@ -271,7 +273,7 @@ joinuser: {
 
 The extension is currently under Chrome and Edge store review.
 
-Until approval, it cannot be installed yet — and installation is the only step before you can start earning rewards.
+Until approval, it cannot be installed yet - and installation is the only step before you can start earning rewards.
 
 Everything else is already running:
 • Account system
@@ -281,6 +283,8 @@ Everything else is already running:
 
 Once the extension is approved, you can install it, browse normally and start earning.
 
+We start September 4th. See you soon!
+
 🚀 Join early and be among the first users.
   `.trim(),
 
@@ -288,6 +292,12 @@ Once the extension is approved, you can install it, browse normally and start ea
     [
       {
         text: "🔥 Get Early Access",
+        url: WEBSITE_URL_2
+      }
+    ],
+    [
+      {
+        text: "🚀 Join the waitlist",
         url: WEBSITE_URL
       }
     ],
