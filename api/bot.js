@@ -166,12 +166,6 @@ Choose how you'd like to get started:
       ],
       [
         {
-          text: "👤 Share my Telegram profile",
-          callback_data: "advertiser_lead"
-        }
-      ],
-      [
-        {
           text: "💬 Chat to manager",
           url: "https://t.me/cactus_bod"
         }
