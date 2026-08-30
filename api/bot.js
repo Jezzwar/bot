@@ -3,6 +3,9 @@ const TELEGRAM_API = "https://api.telegram.org";
 const WEBSITE_URL =
   "https://tributly.io/?utm_source=telegram&utm_medium=paid&utm_campaign=telegram_ads";
 
+const WEBSITE_URL_2 =
+  "https://beta.tributly.io/?panel=earn";
+
 const ADVERTISER_URL =
   "https://tributly.io/?utm_source=telegram&utm_medium=paid&utm_campaign=telegram_ads";
 
@@ -227,7 +230,40 @@ Be ready before the first impressions become available.
   ]
 },
   
+joinuser: {
+  text: `
+⚠️ <b>Tributly is almost ready</b>
 
+The extension is currently in Chrome and Edge store review.
+
+Until approval, it cannot be installed yet — and installation is the only thing standing between you and earning rewards.
+
+Everything else is already running:
+• Your account system
+• Reward tracking
+• Advertiser campaigns
+• The platform infrastructure
+
+Once the extension is approved, you can install it, browse normally and start earning from your attention.
+
+🚀 Be one of the first users when we launch.
+  `.trim(),
+
+  keyboard: [
+    [
+      {
+        text: "🚀 Create user account",
+        url: WEBSITE_URL_2
+      }
+    ],
+    [
+      {
+        text: "⬅️ Back",
+        callback_data: "start"
+      }
+    ]
+  ]
+},
 
 
   joinwaitlist: {
@@ -242,8 +278,8 @@ ${WEBSITE_URL}
     keyboard: [
       [
         {
-          text: "🚀 Join the waitlist",
-          url: WEBSITE_URL
+          text: "🚀 Become a user",
+          callback_data: "joinuser"
         }
       ],
       [
@@ -557,7 +593,7 @@ The team can contact you directly on Telegram.
             inline_keyboard: [
               [
                 {
-                  text: "🚀 Join advertiser waitlist",
+                  text: "🗓️ Join advertiser waitlist",
                   url: ADVERTISER_URL
                 }
               ],
