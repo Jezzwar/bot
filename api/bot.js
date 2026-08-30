@@ -50,9 +50,9 @@ Join the waitlist to stay updated.
     keyboard: [
       [
         {
-          text: "🗓️ Join the waitlist",
-          url: WEBSITE_URL
-        }
+          text: "🚀 Become a User",
+          callback_data: "joinuser"
+      }
       ],
       [
         {
@@ -265,6 +265,40 @@ Once the extension is approved, you can install it, browse normally and start ea
   ]
 },
 
+joinuser: {
+  text: `
+⚠️ <b>Tributly is almost ready</b>
+
+The extension is currently under Chrome and Edge store review.
+
+Until approval, it cannot be installed yet — and installation is the only step before you can start earning rewards.
+
+Everything else is already running:
+• Account system
+• Reward tracking
+• Advertiser campaigns
+• Platform infrastructure
+
+Once the extension is approved, you can install it, browse normally and start earning.
+
+🚀 Join early and be among the first users.
+  `.trim(),
+
+  keyboard: [
+    [
+      {
+        text: "🔥 Get Early Access",
+        url: WEBSITE_URL
+      }
+    ],
+    [
+      {
+        text: "⬅️ Back",
+        callback_data: "start"
+      }
+    ]
+  ]
+},
 
   joinwaitlist: {
     text: `
@@ -655,6 +689,9 @@ The team can contact you directly on Telegram.
 
       case "/joinwaitlist":
       case "/joinbeta":
+      case "joinuser":
+        screenName = "joinuser";
+        break;
       case "joinwaitlist":
         screenName = "joinwaitlist";
         break;
