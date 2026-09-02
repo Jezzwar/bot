@@ -17,7 +17,7 @@ const ADVERTISER_URL_2 =
 const LEAD_RECEIVER_CHAT_ID = "-1004427158558";
 const LEAD_RECEIVER_THREAD_ID = 64;
 
-const SUPABASE_URL = "https://xxxxx.supabase.co";
+const SUPABASE_URL = "https://ebinxxtajbucndwqfbgh.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImViaW54eHRhamJ1Y25kd3FmYmdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgzNzMwOTgsImV4cCI6MjEwMzk0OTA5OH0.WbrS-JLp9oW8lN5PdqoiR3y7dGwv2ms-8T1HyvfQbQU";
 
 
@@ -30,13 +30,23 @@ const supabase = createClient(
 
 async function saveUser(user){
 
-  await supabase
-  .from("users")
-  .upsert({
-  telegram_id: user.id,
-  username: user.username || null,
-  first_name: user.first_name || null
-},
+  const { data, error } = await supabase
+    .from("users")
+    .upsert({
+      telegram_id: user.id,
+      username: user.username || null,
+      first_name: user.first_name || null
+    },{
+      onConflict:"telegram_id"
+    });
+
+  if(error){
+    console.error("SUPABASE ERROR:", error);
+  } else {
+    console.log("USER SAVED:", user.id);
+  }
+
+}
 
 {
 onConflict:"telegram_id"
