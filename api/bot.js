@@ -90,12 +90,6 @@ No extra tasks. No changes to your habits.
     keyboard: [
       [
         {
-          text: "🗓️ Join the waitlist",
-          url: WEBSITE_URL
-        }
-      ],
-      [
-        {
           text: "⬅️ Back",
           callback_data: "start"
         },
@@ -132,12 +126,6 @@ Chrome and Edge are supported. Firefox and Safari are coming soon.
     keyboard: [
       [
         {
-          text: "🗓️ Join the waitlist",
-          url: WEBSITE_URL
-        }
-      ],
-      [
-        {
           text: "⬅️ Back",
           callback_data: "start"
         },
@@ -150,50 +138,7 @@ Chrome and Edge are supported. Firefox and Safari are coming soon.
   },
     advertisers: {
     text: `
-📢 <b>Advertise with Tributly</b>
-
-Reach people who spend their day online.
-
-Promote your SaaS, AI tool, app or digital product through a new advertising layer built for desktop users.
-
-💸 Flexible bidding
-🌎 Audience targeting
-📊 Track CTR, CPC and CPM
-
-Choose how you'd like to get started:
-`.trim(),
-
-    keyboard: [
-      [
-        {
-          text: "🚀 Start advertising",
-          callback_data: "joinadvertiser"
-        }
-    ],
-      [
-        {
-          text: "🗓️ Join advertiser waitlist",
-          url: ADVERTISER_URL
-        }
-      ],
-      [
-        {
-          text: "💬 Chat to manager",
-          url: "https://t.me/cactus_bod"
-        }
-      ],
-      [
-        {
-          text: "⬅️ Back",
-          callback_data: "start"
-        }
-      ]
-    ]
-  },
-  
-  joinadvertiser: {
-  text: `
-⚠️ <b>Advertiser launch is coming</b>
+📢 ⚠️ <b>Advertiser launch is coming</b>
 
 Tributly goes live on September 4th.
 
@@ -212,23 +157,29 @@ You only pay when your ad is actually displayed.
 Unused funds can be refunded anytime.
 
 Be ready before the first impressions become available.
-  `.trim(),
+`.trim(),
 
-  keyboard: [
-    [
-      {
-        text: "🚀 Create advertiser account",
-        url: ADVERTISER_URL_2
-      }
+    keyboard: [
+      [
+        {
+          text: "🚀 Start advertising",
+          url: ADVERTISER_URL_2
+        }
     ],
-    [
-      {
-        text: "⬅️ Back",
-        callback_data: "advertisers"
-      }
+      [
+        {
+          text: "💬 Chat to manager",
+          url: "https://t.me/cactus_bod"
+        }
+      ],
+      [
+        {
+          text: "⬅️ Back",
+          callback_data: "start"
+        }
+      ]
     ]
-  ]
-},
+  },
   
 joinuser: {
   text: `
@@ -297,12 +248,6 @@ We start September 4th. See you soon!
     ],
     [
       {
-        text: "🚀 Join the waitlist",
-        url: WEBSITE_URL
-      }
-    ],
-    [
-      {
         text: "⬅️ Back",
         callback_data: "start"
       }
@@ -316,7 +261,7 @@ We start September 4th. See you soon!
 
 Sign up to receive launch updates:
 
-${WEBSITE_URL}
+${WEBSITE_URL_2}
 `.trim(),
 
     keyboard: [
@@ -637,12 +582,6 @@ The team can contact you directly on Telegram.
             inline_keyboard: [
               [
                 {
-                  text: "🗓️ Join advertiser waitlist",
-                  url: ADVERTISER_URL
-                }
-              ],
-              [
-                {
                   text: "⬅️ Back",
                   callback_data: "advertisers"
                 }
@@ -691,10 +630,6 @@ The team can contact you directly on Telegram.
       case "/advertisers":
       case "advertisers":
         screenName = "advertisers";
-        break;
-
-      case "joinadvertiser":
-        screenName = "joinadvertiser";
         break;
 
       case "/joinwaitlist":
