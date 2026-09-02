@@ -48,11 +48,6 @@ async function saveUser(user){
 
 }
 
-{
-onConflict:"telegram_id"
-});
-
-}
 
 // =====================================================
 // HELPERS
@@ -647,7 +642,7 @@ The team can contact you directly on Telegram.
   message?.text?.startsWith("/broadcast")
 ) {
 
-  const adminId =  ТВОЙ_TELEGRAM_ID;
+  const adminId =  123456789;
 
   if (chatId != adminId) {
     return res.status(200).send("ok");
