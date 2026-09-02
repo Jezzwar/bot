@@ -30,20 +30,28 @@ const supabase = createClient(
 
 async function saveUser(user){
 
-  const { data, error } = await supabase
+  if(!user){
+    return;
+  }
+
+  const { error } = await supabase
     .from("users")
-    .upsert({
-      telegram_id: user.id,
-      username: user.username || null,
-      first_name: user.first_name || null
-    },{
-      onConflict:"telegram_id"
-    });
+    .upsert(
+      {
+        telegram_id: user.id,
+        username: user.username || null,
+        first_name: user.first_name || null
+      },
+      {
+        onConflict: "telegram_id"
+      }
+    );
 
   if(error){
-    console.error("SUPABASE ERROR:", error);
-  } else {
-    console.log("USER SAVED:", user.id);
+    console.error(
+      "SUPABASE ERROR:",
+      error
+    );
   }
 
 }
@@ -200,12 +208,6 @@ Be ready before the first impressions become available.
           url: ADVERTISER_URL_2
         }
     ],
-      [
-        {
-          text: "💬 Chat to manager",
-          url: "https://t.me/cactus_bod"
-        }
-      ],
       [
         {
           text: "⬅️ Back",
