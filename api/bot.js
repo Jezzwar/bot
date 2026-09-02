@@ -399,11 +399,25 @@ export default async function handler(req, res) {
       callbackQuery?.message?.chat?.id;
     if(message || callbackQuery){
 
+    if(message || callbackQuery){
+
+  try {
+
     await saveUser(
       message?.from ||
       callbackQuery?.from
     );
 
+  } catch(error){
+
+    console.error(
+      "SAVE USER ERROR:",
+      error
+    );
+
+  }
+
+}
 }
 
     const chatType =
