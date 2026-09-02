@@ -1,3 +1,5 @@
+import { createClient } from "@supabase/supabase-js";
+
 const TELEGRAM_API = "https://api.telegram.org";
 
 const WEBSITE_URL =
@@ -18,7 +20,7 @@ const LEAD_RECEIVER_THREAD_ID = 64;
 const SUPABASE_URL = "https://xxxxx.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImViaW54eHRhamJ1Y25kd3FmYmdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgzNzMwOTgsImV4cCI6MjEwMzk0OTA5OH0.WbrS-JLp9oW8lN5PdqoiR3y7dGwv2ms-8T1HyvfQbQU";
 
-import { createClient } from "@supabase/supabase-js";
+
 
 
 const supabase = createClient(
@@ -28,13 +30,15 @@ const supabase = createClient(
 
 async function saveUser(user){
 
-await supabase
-.from("users")
-.upsert({
-telegram_id: user.id,
-username: user.username || null,
-first_name: user.first_name || null
-},{
+  await supabase
+  .from("users")
+  .upsert({
+  telegram_id: user.id,
+  username: user.username || null,
+  first_name: user.first_name || null
+},
+
+{
 onConflict:"telegram_id"
 });
 
@@ -51,12 +55,7 @@ function escapeHtml(value = "") {
     .replace(/>/g, "&gt;");
 }
 
-function saveUser(chatId) {
-  if (!users.includes(chatId)) {
-    users.push(chatId);
-    console.log("New user:", chatId);
-  }
-}
+
 
 
 
@@ -420,7 +419,7 @@ export default async function handler(req, res) {
     const input =
       message?.text?.trim() ||
       callbackQuery?.data;
-      saveUser(chatId);
+
 
 
     // =====================================================
@@ -647,22 +646,6 @@ The team can contact you directly on Telegram.
   const text = message.text
     .replace("/broadcast", "")
     .trim();
-
-
-  for (const userId of users) {
-
-    await telegramRequest(
-      token,
-      "sendMessage",
-      {
-        chat_id: userId,
-        text: text,
-        parse_mode: "HTML"
-      }
-    );
-
-  }
-
 
   return res
     .status(200)
