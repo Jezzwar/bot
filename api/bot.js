@@ -702,13 +702,6 @@ if (message?.text?.startsWith("/broadcast")) {
     return res.status(200).send("ok");
   }
 
-  await supabase
-  .from("broadcast_control")
-  .update({
-    is_running: true
-  })
-  .eq("id", 1);
-
 
   const text = message.text
     .replace("/broadcast", "")
@@ -728,6 +721,13 @@ if (message?.text?.startsWith("/broadcast")) {
 
     return res.status(200).send("ok");
   }
+
+  await supabase
+  .from("broadcast_control")
+  .update({
+    is_running: true
+  })
+  .eq("id", 1);
 
 
   const { data: users, error } = await supabase
