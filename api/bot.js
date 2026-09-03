@@ -18,10 +18,11 @@ const LEAD_RECEIVER_CHAT_ID = "-1004427158558";
 const LEAD_RECEIVER_THREAD_ID = 64;
 
 const SUPABASE_URL = "https://ebinxxtajbucndwqfbgh.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImViaW54eHRhamJ1Y25kd3FmYmdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgzNzMwOTgsImV4cCI6MjEwMzk0OTA5OH0.WbrS-JLp9oW8lN5PdqoiR3y7dGwv2ms-8T1HyvfQbQU";
+const SUPABASE_KEY = process.env.SUPABASE_KEY;
 
-
-
+if (!SUPABASE_URL || !SUPABASE_KEY) {
+  throw new Error("Supabase environment variables missing");
+}
 
 const supabase = createClient(
   SUPABASE_URL,
