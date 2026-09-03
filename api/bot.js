@@ -746,7 +746,7 @@ if (controlError) {
   }
 
 
-  const BATCH_SIZE = 50;
+  const BATCH_SIZE = 100;
 
   let sent = 0;
   let failed = 0;
