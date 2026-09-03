@@ -655,23 +655,185 @@ The team can contact you directly on Telegram.
         .send("ok");
     }
 
-    if (
-  message?.text?.startsWith("/broadcast")
-) {
+// =====================================================
+// STOP BROADCAST
+// =====================================================
 
-  const adminId =  123456789;
+if (message?.text === "/stop") {
+
+  const adminId = 724797169;
 
   if (chatId != adminId) {
     return res.status(200).send("ok");
   }
 
+
+  await supabase
+    .from("broadcast_control")
+    .update({
+      is_running: false
+    })
+    .eq("id", 1);
+
+
+  await telegramRequest(
+    token,
+    "sendMessage",
+    {
+      chat_id: chatId,
+      text: "🛑 Рассылка остановлена"
+    }
+  );
+
+
+  return res.status(200).send("stopped");
+}
+
+   // =====================================================
+// BROADCAST
+// =====================================================
+
+if (message?.text?.startsWith("/broadcast")) {
+
+  const adminId = 724797169; 
+
+
+  if (chatId != adminId) {
+    return res.status(200).send("ok");
+  }
+
+  await supabase
+  .from("broadcast_control")
+  .update({
+    is_running: true
+  })
+  .eq("id", 1);
+
+
   const text = message.text
     .replace("/broadcast", "")
     .trim();
 
-  return res
-    .status(200)
-    .send("broadcast done");
+
+  if (!text) {
+
+    await telegramRequest(
+      token,
+      "sendMessage",
+      {
+        chat_id: chatId,
+        text: "❌ Напиши текст после /broadcast"
+      }
+    );
+
+    return res.status(200).send("ok");
+  }
+
+
+  const { data: users, error } = await supabase
+    .from("users")
+    .select("telegram_id");
+
+
+  if (error) {
+    console.error(error);
+    return res.status(200).send("database error");
+  }
+
+
+  const BATCH_SIZE = 50;
+
+  let sent = 0;
+  let failed = 0;
+
+  
+  for (
+    let i = 0;
+    i < users.length;
+    i += BATCH_SIZE
+  ) {
+
+  const { data: control } = await supabase
+  .from("broadcast_control")
+  .select("is_running")
+  .eq("id",1)
+  .single();
+
+
+if (!control?.is_running) {
+
+  await telegramRequest(
+    token,
+    "sendMessage",
+    {
+      chat_id: chatId,
+      text: `🛑 Остановлено\n\nОтправлено: ${sent}`
+    }
+  );
+
+  return res.status(200).send("stopped");
+}
+
+
+    const batch = users.slice(
+      i,
+      i + BATCH_SIZE
+    );
+
+
+    await Promise.all(
+      batch.map(async (user)=>{
+
+        try {
+
+          await telegramRequest(
+            token,
+            "sendMessage",
+            {
+              chat_id: user.telegram_id,
+              text: text,
+              parse_mode: "HTML"
+            }
+          );
+
+
+          sent++;
+
+
+        } catch(error){
+
+          console.error(
+            "SEND ERROR:",
+            user.telegram_id,
+            error.message
+          );
+
+          failed++;
+
+        }
+
+      })
+    );
+
+
+    // пауза между пачками
+    await new Promise(
+      resolve => setTimeout(resolve,1500)
+    );
+
+  }
+  
+  await telegramRequest(
+  token,
+  "sendMessage",
+  {
+    chat_id: chatId,
+    text:
+      `✅ Рассылка завершена\n\n📨 Отправлено: ${sent}\n❌ Ошибок: ${failed}`
+  }
+);
+
+  return res.status(200).send("broadcast done");
 }
 
     // =====================================================
