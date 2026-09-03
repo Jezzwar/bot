@@ -765,19 +765,7 @@ if (controlError) {
   .single();
 
 
-if (!control?.is_running) {
 
-  await telegramRequest(
-    token,
-    "sendMessage",
-    {
-      chat_id: chatId,
-      text: `🛑 Остановлено\n\nОтправлено: ${sent}`
-    }
-  );
-
-  return res.status(200).send("stopped");
-}
 
 
     const batch = users.slice(
