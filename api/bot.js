@@ -722,12 +722,17 @@ if (message?.text?.startsWith("/broadcast")) {
     return res.status(200).send("ok");
   }
 
-  await supabase
+  const { error: controlError } = await supabase
   .from("broadcast_control")
   .update({
     is_running: true
   })
   .eq("id", 1);
+
+if (controlError) {
+  console.error("START ERROR:", controlError);
+  return res.status(200).send("control error");
+}
 
 
   const { data: users, error } = await supabase
