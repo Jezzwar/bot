@@ -5,14 +5,10 @@ const TELEGRAM_API = "https://api.telegram.org";
 const WEBSITE_URL =
   "https://tributly.io/?utm_source=telegram&utm_medium=paid&utm_campaign=telegram_ads";
 
-const WEBSITE_URL_2 =
-  "https://beta.tributly.io/?panel=earn&utm_source=telegram&utm_medium=cpc&utm_campaign=users_earn";
-
 const ADVERTISER_URL =
   "https://tributly.io/?utm_source=telegram&utm_medium=paid&utm_campaign=telegram_ads";
 
-const ADVERTISER_URL_2 =
-  "https://beta.tributly.io/?panel=advertise&utm_source=telegram&utm_medium=cpc&utm_campaign=advertisers";
+
 
 const LEAD_RECEIVER_CHAT_ID = "-1004427158558";
 const LEAD_RECEIVER_THREAD_ID = 64;
@@ -82,19 +78,20 @@ const screens = {
     text: `
 👋 <b>Welcome to Tributly</b>
 
-Your attention has value.
-Earn rewards while browsing normally.
+Tributly is live 🚀
 
-🚀 <b>Launching September 4th.</b>
+Turn your attention into rewards while browsing normally.
 
-Join the waitlist to stay updated or GET early access ✨.
+Install the extension, browse as usual, and earn from the value of your attention.
+
+Join thousands of early users building the future of rewarded browsing.
 `.trim(),
 
     keyboard: [
       [
         {
           text: "👤 Become a User",
-          callback_data: "joinuser"
+          url: WEBSITE_URL
         }
       ],
       [
@@ -110,7 +107,7 @@ Join the waitlist to stay updated or GET early access ✨.
       [
         {
           text: "📢 Advertise with Tributly",
-          callback_data: "advertisers"
+          url: ADVERTISER_URL
         }
       ]
     ]
@@ -183,30 +180,20 @@ Chrome and Edge are supported. Firefox and Safari are coming soon.
     text: `
 📢 ⚠️ <b>Advertiser launch is coming</b>
 
-Tributly goes live on September 4th.
+📢 <b>Advertise with Tributly</b>
 
-Before launch, advertisers can already prepare:
-• Create an advertiser account
-• Set up your first campaign
-• Choose your bid and budget
-• Add funds to your balance
+Tributly is live 🚀
 
-Ads will start running only after launch, when the first users are online.
+Reach users inside their everyday browsing experience.
 
-💳 No charges before September 4th.
-You only pay when your ad is actually displayed.
-
-💰 Your balance never expires.
-Unused funds can be refunded anytime.
-
-Be ready before the first impressions become available.
+Create your campaign, set your budget, and start reaching engaged users.
 `.trim(),
 
     keyboard: [
       [
         {
           text: "🚀 Start advertising",
-          url: ADVERTISER_URL_2
+          url: ADVERTISER_URL
         }
     ],
       [
@@ -243,7 +230,7 @@ We start September 4th. See you soon!
     [
       {
         text: "🚀 Create user account",
-        url: WEBSITE_URL_2
+        url: WEBSITE_URL
       }
     ],
     [
@@ -280,7 +267,7 @@ We start September 4th. See you soon!
     [
       {
         text: "🔥 Get Early Access",
-        url: WEBSITE_URL_2
+        url: WEBSITE_URL
       }
     ],
     [
@@ -298,7 +285,7 @@ We start September 4th. See you soon!
 
 Sign up to receive launch updates:
 
-${WEBSITE_URL_2}
+${WEBSITE_URL}
 `.trim(),
 
     keyboard: [
