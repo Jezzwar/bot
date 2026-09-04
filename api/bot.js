@@ -723,8 +723,9 @@ if (controlError) {
 
 
   const { data: users, error } = await supabase
-    .from("users")
-    .select("telegram_id");
+  .from("users")
+  .select("telegram_id")
+  .eq("blocked", false);
 
 
   if (error) {
@@ -782,15 +783,33 @@ if (controlError) {
 
         } catch(error){
 
-          console.error(
-            "SEND ERROR:",
-            user.telegram_id,
-            error.message
-          );
+  console.error(
+    "SEND ERROR:",
+    user.telegram_id,
+    error.message
+  );
 
-          failed++;
 
-        }
+  if (
+    error.message.includes("403")
+  ) {
+
+    await supabase
+      .from("users")
+      .update({
+        blocked: true
+      })
+      .eq(
+        "telegram_id",
+        user.telegram_id
+      );
+
+  }
+
+
+  failed++;
+
+}
 
       })
     );
@@ -798,7 +817,7 @@ if (controlError) {
 
     // пауза между пачками
     await new Promise(
-      resolve => setTimeout(resolve,1500)
+      resolve => setTimeout(resolve,1000)
     );
 
   }
