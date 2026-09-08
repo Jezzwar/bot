@@ -736,7 +736,7 @@ if (controlError) {
   users.splice(0, 2400);
 
 
-  const BATCH_SIZE = 100;
+  const BATCH_SIZE = 150;
 
   let sent = 0;
   let failed = 0;
