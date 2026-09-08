@@ -724,9 +724,10 @@ if (controlError) {
 
   const { data: users, error } = await supabase
   .from("users")
-  .select("telegram_id")
-  .eq("blocked", false);
+  .select("telegram_id");
 
+console.log("USERS:", users);
+console.log("ERROR:", error);
   console.log("USERS COUNT:", users?.length);
 
   if (error) {
