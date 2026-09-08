@@ -727,6 +727,7 @@ if (controlError) {
   .select("telegram_id")
   .eq("blocked", false);
 
+  console.log("USERS COUNT:", users?.length);
 
   if (error) {
     console.error(error);
