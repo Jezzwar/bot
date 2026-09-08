@@ -733,10 +733,10 @@ if (controlError) {
     return res.status(200).send("database error");
   }
 
-  users.splice(0, 2400);
+  users.splice(0, 1000);
 
 
-  const BATCH_SIZE = 150;
+  const BATCH_SIZE = 50;
 
   let sent = 0;
   let failed = 0;
