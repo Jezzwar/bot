@@ -3,10 +3,10 @@ import { createClient } from "@supabase/supabase-js";
 const TELEGRAM_API = "https://api.telegram.org";
 
 const WEBSITE_URL =
-  "https://tributly.io/?utm_source=telegram&utm_medium=paid&utm_campaign=telegram_ads";
+  "https://tributly.io/?utm_source=telegram_ads&utm_medium=cpc&utm_campaign=new_telegram_test1_user";
 
 const ADVERTISER_URL =
-  "https://tributly.io/?utm_source=telegram&utm_medium=paid&utm_campaign=telegram_ads";
+  "https://tributly.io/?utm_source=telegram_ads&utm_medium=cpc&utm_campaign=new_telegram_test1_adv";
 
 
 
@@ -724,10 +724,9 @@ if (controlError) {
 
   const { data: users, error } = await supabase
   .from("users")
-  .select("telegram_id");
+  .select("telegram_id")
+  .eq("blocked", false);
 
-console.log("USERS:", users);
-console.log("ERROR:", error);
   console.log("USERS COUNT:", users?.length);
 
   if (error) {
