@@ -725,16 +725,16 @@ if (controlError) {
   const { data: users, error } = await supabase
   .from("users")
   .select("telegram_id")
-  .eq("blocked", false);
+  .or("blocked.is.null,blocked.eq.false");
 
   console.log("USERS COUNT:", users?.length);
+  console.log("USERS ERROR:", error);
 
   if (error) {
     console.error(error);
     return res.status(200).send("database error");
   }
 
-  users.splice(0, 1000);
 
 
   const BATCH_SIZE = 100;
