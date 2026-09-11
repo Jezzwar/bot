@@ -676,22 +676,26 @@ if (message?.text === "/stop") {
   return res.status(200).send("stopped");
 }
 
-   // =====================================================
-// BROADCAST
+// =====================================================
+// BROADCAST PARTS
 // =====================================================
 
-if (message?.text?.startsWith("/broadcast")) {
+if (message?.text?.match(/^\/broadcast[123]/)) {
 
-  const adminId = 724797169; 
-
+  const adminId = 724797169;
 
   if (chatId != adminId) {
     return res.status(200).send("ok");
   }
 
 
+  const command = message.text.match(/^\/broadcast([123])/);
+
+  const part = Number(command[1]);
+
+
   const text = message.text
-    .replace("/broadcast", "")
+    .replace(`/broadcast${part}`, "")
     .trim();
 
 
@@ -702,141 +706,147 @@ if (message?.text?.startsWith("/broadcast")) {
       "sendMessage",
       {
         chat_id: chatId,
-        text: "❌ Напиши текст после /broadcast"
+        text:
+          `❌ Используй:\n\n/broadcast1 текст\n/broadcast2 текст\n/broadcast3 текст`
       }
     );
 
     return res.status(200).send("ok");
   }
 
-  const { error: controlError } = await supabase
-  .from("broadcast_control")
-  .update({
-    is_running: true
-  })
-  .eq("id", 1);
 
-if (controlError) {
-  console.error("START ERROR:", controlError);
-  return res.status(200).send("control error");
-}
+
+  const ranges = {
+    1: {
+      from: 0,
+      to: 1000
+    },
+    2: {
+      from: 1000,
+      to: 2000
+    },
+    3: {
+      from: 2000,
+      to: 3000
+    }
+  };
+
+
+  const range = ranges[part];
+
 
 
   const { data: users, error } = await supabase
-  .from("users")
-  .select("telegram_id")
-  .or("blocked.is.null,blocked.eq.false");
+    .from("users")
+    .select("telegram_id")
+    .or("blocked.is.null,blocked.eq.false")
+    .order("id", { ascending: true })
+    .range(
+      range.from,
+      range.to - 1
+    );
 
-  console.log("USERS COUNT:", users?.length);
-  console.log("USERS ERROR:", error);
 
-  if (error) {
+
+  if(error){
+
     console.error(error);
-    return res.status(200).send("database error");
+
+    return res
+      .status(200)
+      .send("database error");
   }
 
 
-
-  const BATCH_SIZE = 100;
 
   let sent = 0;
   let failed = 0;
 
-  
-  for (
-    let i = 0;
-    i < users.length;
-    i += BATCH_SIZE
-  ) {
-
-  const { data: control } = await supabase
-  .from("broadcast_control")
-  .select("is_running")
-  .eq("id",1)
-  .single();
 
 
+  for(const user of users){
+
+    try{
+
+      await telegramRequest(
+        token,
+        "sendMessage",
+        {
+          chat_id: user.telegram_id,
+          text:text,
+          parse_mode:"HTML"
+        }
+      );
 
 
-
-    const batch = users.slice(
-      i,
-      i + BATCH_SIZE
-    );
+      sent++;
 
 
-    await Promise.all(
-      batch.map(async (user)=>{
+    }catch(error){
 
-        try {
+      console.error(
+        "SEND ERROR",
+        user.telegram_id,
+        error.message
+      );
 
-          await telegramRequest(
-            token,
-            "sendMessage",
-            {
-              chat_id: user.telegram_id,
-              text: text,
-              parse_mode: "HTML"
-            }
+
+      failed++;
+
+
+      if(error.message.includes("403")){
+
+        await supabase
+          .from("users")
+          .update({
+            blocked:true
+          })
+          .eq(
+            "telegram_id",
+            user.telegram_id
           );
 
+      }
 
-          sent++;
+    }
 
 
-        } catch(error){
+    await new Promise(
+      resolve => setTimeout(resolve,100)
+    );
 
-  console.error(
-    "SEND ERROR:",
-    user.telegram_id,
-    error.message
+  }
+
+
+
+  await telegramRequest(
+    token,
+    "sendMessage",
+    {
+      chat_id:chatId,
+
+      text:
+      `
+✅ Broadcast ${part} завершён
+
+👥 Пользователей:
+${users.length}
+
+📨 Отправлено:
+${sent}
+
+❌ Ошибок:
+${failed}
+      `.trim()
+    }
   );
 
 
-  if (
-    error.message.includes("403")
-  ) {
-
-    await supabase
-      .from("users")
-      .update({
-        blocked: true
-      })
-      .eq(
-        "telegram_id",
-        user.telegram_id
-      );
-
-  }
-
-
-  failed++;
-
-}
-
-      })
-    );
-
-
-    // пауза между пачками
-    await new Promise(
-      resolve => setTimeout(resolve,1000)
-    );
-
-  }
-  
-  await telegramRequest(
-  token,
-  "sendMessage",
-  {
-    chat_id: chatId,
-    text:
-      `✅ Рассылка завершена\n\n📨 Отправлено: ${sent}\n❌ Ошибок: ${failed}`
-  }
-);
-
   return res.status(200).send("broadcast done");
+
 }
+
+
 
     // =====================================================
     // NORMAL BOT SCREENS
