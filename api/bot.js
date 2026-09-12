@@ -692,7 +692,7 @@ if (message?.text?.match(/^\/broadcast[123]/)) {
   const command = message.text.match(/^\/broadcast([123])/);
 
   const part = Number(command[1]);
-
+  console.log("BROADCAST PART =", part);
 
   const text = message.text
     .replace(`/broadcast${part}`, "")
@@ -747,6 +747,13 @@ if(running?.is_running){
   .select("telegram_id")
   .eq("broadcast_group", part)
   .or("blocked.is.null,blocked.eq.false");
+
+  console.log(
+  "FOUND USERS:",
+  part,
+  users?.length,
+  users?.slice(0,5)
+);
 
   if(error){
 
@@ -836,7 +843,7 @@ await supabase
     is_running:false
   })
   .eq("id",1);
-  
+
 
   await telegramRequest(
     token,
