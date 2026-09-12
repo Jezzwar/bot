@@ -759,14 +759,16 @@ if(running?.is_running){
 
 
   const { data: users, error } = await supabase
-    .from("users")
-    .select("telegram_id")
-    .or("blocked.is.null,blocked.eq.false")
-    .order("id", { ascending: true })
-    .range(
-      range.from,
-      range.to - 1
-    );
+  .from("users")
+  .select("telegram_id")
+  .eq("broadcast_group", part)
+  .or("blocked.is.null,blocked.eq.false");
+
+
+const users = allUsers.slice(
+    range.from,
+    range.to
+);
 
 
 
