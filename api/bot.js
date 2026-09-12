@@ -716,23 +716,7 @@ if (message?.text?.match(/^\/broadcast[123]/)) {
 
 
 
-  const ranges = {
-    1: {
-      from: 0,
-      to: 1000
-    },
-    2: {
-      from: 1000,
-      to: 2000
-    },
-    3: {
-      from: 2000,
-      to: 3000
-    }
-  };
-
-
-  const range = ranges[part];
+  
 
   const { data: running } = await supabase
   .from("broadcast_control")
@@ -763,14 +747,6 @@ if(running?.is_running){
   .select("telegram_id")
   .eq("broadcast_group", part)
   .or("blocked.is.null,blocked.eq.false");
-
-
-const users = allUsers.slice(
-    range.from,
-    range.to
-);
-
-
 
   if(error){
 
@@ -804,16 +780,7 @@ await supabase
     break;
 
   }
-
     try{
-
-      await supabase
-      .from("broadcast_control")
-      .update({
-      is_running:false
-    })
-    .eq("id",1);
-
       await telegramRequest(
         token,
         "sendMessage",
@@ -863,7 +830,13 @@ await supabase
 
   }
 
-
+  await supabase
+  .from("broadcast_control")
+  .update({
+    is_running:false
+  })
+  .eq("id",1);
+  
 
   await telegramRequest(
     token,
