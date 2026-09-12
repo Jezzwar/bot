@@ -718,11 +718,23 @@ if (message?.text?.match(/^\/broadcast[123]/)) {
 
   
 
-  const { data: running } = await supabase
-  .from("broadcast_control")
-  .select("is_running")
-  .eq("id",1)
-  .single();
+  const { data: locked, error: lockError } = await supabase
+.rpc("lock_broadcast");
+
+
+if(lockError || !locked){
+
+  await telegramRequest(
+    token,
+    "sendMessage",
+    {
+      chat_id: chatId,
+      text:"⚠️ Рассылка уже идёт"
+    }
+  );
+
+  return res.status(200).send("locked");
+}
 
 
 if(running?.is_running){
