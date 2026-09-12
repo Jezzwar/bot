@@ -744,7 +744,7 @@ if(running?.is_running){
 
   const { data: users, error } = await supabase
   .from("users")
-  .select("telegram_id")
+  .select("telegram_id", { count: "exact", head: true })
   .eq("broadcast_group", part)
   .or("blocked.is.null,blocked.eq.false");
 
