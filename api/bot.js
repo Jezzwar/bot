@@ -734,6 +734,28 @@ if (message?.text?.match(/^\/broadcast[123]/)) {
 
   const range = ranges[part];
 
+  const { data: running } = await supabase
+  .from("broadcast_control")
+  .select("is_running")
+  .eq("id",1)
+  .single();
+
+
+if(running?.is_running){
+
+  await telegramRequest(
+    token,
+    "sendMessage",
+    {
+      chat_id: chatId,
+      text:"⚠️ Уже идёт рассылка. Сначала используй /stop"
+    }
+  );
+
+  return res.status(200).send("already running");
+
+}
+
 
 
   const { data: users, error } = await supabase
@@ -757,16 +779,38 @@ if (message?.text?.match(/^\/broadcast[123]/)) {
       .send("database error");
   }
 
-
+await supabase
+.from("broadcast_control")
+.update({
+  is_running:true
+})
+.eq("id",1);
 
   let sent = 0;
   let failed = 0;
 
-
-
   for(const user of users){
+    const {data:state}=await supabase
+    .from("broadcast_control")
+    .select("is_running")
+    .eq("id",1)
+    .single();
+
+
+  if(!state?.is_running){
+
+    break;
+
+  }
 
     try{
+
+      await supabase
+      .from("broadcast_control")
+      .update({
+      is_running:false
+    })
+    .eq("id",1);
 
       await telegramRequest(
         token,
