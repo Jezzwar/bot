@@ -43,12 +43,16 @@ const screens = {
     text: `
 👋 <b>Welcome to Tributly</b>
 
-Turn your everyday browsing into rewards 🚀
+Your attention has value 🚀
 
-Install the extension, browse normally, and earn from sponsored attention.
+Earn rewards from sponsored messages while browsing and coding with AI tools.
+
+Install Tributly for:
+🌐 Chrome & Edge
+💻 AI development tools
 
 No extra tasks.
-No changes to your habits.
+No subscriptions.
 
 <b>Your attention has value.</b>
     `.trim(),
@@ -86,11 +90,21 @@ Welcome to rewarded browsing.
 
 1️⃣ Install the extension
 
-2️⃣ Browse the web as usual
+Browser: Chrome / Edge
+Developer: AI coding tools
 
-3️⃣ See sponsored messages inside your browser
+2️⃣ Work normally
+
+Browse websites or use your AI coding workflow.
+
+3️⃣ See sponsored messages
+
+Tributly shows verified sponsored placements.
 
 4️⃣ Receive rewards from your attention
+
+Advertisers pay for attention.
+You receive a share.
 
 Simple. Transparent. User-controlled.
     `.trim(),
@@ -106,23 +120,18 @@ Simple. Transparent. User-controlled.
     text: `
 ❓ <b>FAQ</b>
 
-❓ <b>FAQ</b>
-
 <b>♦️ What is Tributly?</b>
 
 Tributly is a rewards platform that shares advertising revenue with users.
-
 You can earn by allowing sponsored placements in your browser and AI development tools.
 
 <b>♦️ How does Tributly work?</b>
 
 Install Tributly on your computer:
-
-• Browser extension for Chrome and Edge
-• IDE extension for AI coding tools
+• Browser extension
+• IDE extension
 
 While you browse or code, verified sponsored messages may appear.
-
 Advertisers pay for attention, and you receive a share of that value.
 
 <b>♦️ What AI tools are supported?</b>
@@ -133,55 +142,39 @@ Supported tools include:
 • Claude Code
 • Cursor
 • Windsurf
-• Codex
-
-More integrations are coming.
 
 <b>♦️ Does Tributly read my browsing history?</b>
 
-No.
-
-Tributly does not read, store, or sell your browsing history or private content.
-
+No. Tributly does not read, store, or sell your browsing history or private content.
 We only collect the minimum information required to verify impressions and calculate rewards.
 
 <b>♦️ Does Tributly see my code or prompts?</b>
 
-No.
-
-Your code, files, and AI conversations stay on your device.
-
+No. Your code, files, and AI conversations stay on your device.
 Tributly only verifies eligible sponsored impressions.
 
 <b>♦️ How much can I earn?</b>
 
 Your earnings depend on verified impressions, advertiser demand, and usage.
-
 Rewards are calculated automatically and shown in your dashboard.
 
 <b>♦️ When can I withdraw?</b>
 
-Withdrawals are available once your balance reaches the minimum payout amount.
-
+Withdrawals are available once your balance reaches the minimum payout amount 10$.
 Payments are processed through Stripe.
 
 <b>♦️ Which browsers are supported?</b>
 
 Chrome and Edge are supported.
-
 More browsers will be added over time.
 
 <b>♦️ Is Tributly free?</b>
 
-Yes.
-
-There is no subscription and no payment required to start earning.
+Yes. There is no subscription and no payment required to start earning.
 
 <b>♦️ Can I stop anytime?</b>
 
-Yes.
-
-You can pause earning or uninstall Tributly whenever you want.
+Yes. You can pause earning or uninstall Tributly whenever you want.
     `.trim(),
     keyboard: [
       [
