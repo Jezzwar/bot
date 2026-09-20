@@ -106,18 +106,82 @@ Simple. Transparent. User-controlled.
     text: `
 ❓ <b>FAQ</b>
 
+❓ <b>FAQ</b>
+
 <b>♦️ What is Tributly?</b>
-A browser extension that lets users earn rewards from sponsored attention.
 
-<b>♦️ Is Tributly safe?</b>
-Yes. We never ask for passwords and never sell personal data.
+Tributly is a rewards platform that shares advertising revenue with users.
 
-<b>♦️ Do you see my browsing history?</b>
-No. We only verify rewarded ads.
+You can earn by allowing sponsored placements in your browser and AI development tools.
 
-<b>♦️ Supported browsers?</b>
+<b>♦️ How does Tributly work?</b>
+
+Install Tributly on your computer:
+
+• Browser extension for Chrome and Edge
+• IDE extension for AI coding tools
+
+While you browse or code, verified sponsored messages may appear.
+
+Advertisers pay for attention, and you receive a share of that value.
+
+<b>♦️ What AI tools are supported?</b>
+
+Tributly works with modern AI development environments.
+
+Supported tools include:
+• Claude Code
+• Cursor
+• Windsurf
+• Codex
+
+More integrations are coming.
+
+<b>♦️ Does Tributly read my browsing history?</b>
+
+No.
+
+Tributly does not read, store, or sell your browsing history or private content.
+
+We only collect the minimum information required to verify impressions and calculate rewards.
+
+<b>♦️ Does Tributly see my code or prompts?</b>
+
+No.
+
+Your code, files, and AI conversations stay on your device.
+
+Tributly only verifies eligible sponsored impressions.
+
+<b>♦️ How much can I earn?</b>
+
+Your earnings depend on verified impressions, advertiser demand, and usage.
+
+Rewards are calculated automatically and shown in your dashboard.
+
+<b>♦️ When can I withdraw?</b>
+
+Withdrawals are available once your balance reaches the minimum payout amount.
+
+Payments are processed through Stripe.
+
+<b>♦️ Which browsers are supported?</b>
+
 Chrome and Edge are supported.
+
 More browsers will be added over time.
+
+<b>♦️ Is Tributly free?</b>
+
+Yes.
+
+There is no subscription and no payment required to start earning.
+
+<b>♦️ Can I stop anytime?</b>
+
+Yes.
+
+You can pause earning or uninstall Tributly whenever you want.
     `.trim(),
     keyboard: [
       [
